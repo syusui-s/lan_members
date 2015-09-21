@@ -1,0 +1,6 @@
+%h2 ログアウト
+%p ログアウトします。よろしいですか？
+%form{:action => "/session", :method => "post"}
+  .fieldset
+    %input{:type => "hidden", :name => '_method', :value => 'delete'}
+    %input.btn.btn-danger{:type => "submit", :value => "ログアウト"}

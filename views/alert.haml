@@ -1,0 +1,4 @@
+%div(id="alert" class="alert alert-#{locals[:type]} alert-dissmiss fade in")
+  %button(type="button" class="close" data-dismiss="alert" aria-label="Close")>
+    %span(aria-hidden="true") &#x274c;
+  &= locals[:message]

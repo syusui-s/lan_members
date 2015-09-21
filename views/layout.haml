@@ -1,0 +1,46 @@
+!!!
+%html{:lang => "ja"}
+  %head
+    %meta{%s(http-equiv) => "content-type", :content => "text/html; charset=utf-8"}
+    %meta{:name => "viewport", :content => "width=device-width, initial-scale=1.0"}
+    %link{:rel => "stylesheet", :type => "text/css", :href => "/css/base.css"}
+    %link{:rel => "stylesheet", :type => "text/css", :href => "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"}
+    %script{:src => "https://code.jquery.com/jquery-2.1.4.min.js"}
+    %script{:src => "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"}
+    %title LAN Members
+  %body
+    .container
+      #page-header
+        %h1
+          %a{:href => url('/')} LAN Members
+          %small ネットワーク上の利用者を表示します
+        %ul.nav.nav-tabs.nav-justified
+          - if session[:user_id]
+            %li{:role => "presentation", :class => (request.path_info == "/" ? "active" : nil)}
+              %a{:href => url("/")}
+                %span.glyphicon.glyphicon-list
+                利用者一覧
+            %li{:role => "presentation", :class => (request.path_info == "/settings" ? "active" : nil)}
+              %a{:href => url("/settings")}
+                %span.glyphicon.glyphicon-cog
+                設定
+            %li{:role => "presentation", :class => (request.path_info == "/logout" ? "active" : nil)}
+              %a{:href => url("/logout")}
+                %span.glyphicon.glyphicon-log-out
+                ログアウト
+          - else
+            %li{:role => "presentation", :class => (request.path_info == "/" ? "active" : nil)}
+              %a{:href => url("/")}
+                %span.glyphicon.glyphicon-home
+                トップ
+            %li{:role => "presentation", :class => (request.path_info == "/login" ? "active" : nil)}
+              %a{:href => url("/login")}
+                %span.glyphicon.glyphicon-log-in
+                ログイン
+            %li{:role => "presentation", :class => (request.path_info == "/signup" ? "active" : nil)}
+              %a{:href => url("/signup")}
+                %span.glyphicon.glyphicon-plus
+                登録
+
+      #main
+        =yield

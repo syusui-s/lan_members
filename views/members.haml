@@ -1,0 +1,53 @@
+%h2 利用者の状況
+%p
+  - active_users_count = User.active_users.count
+  アクティブユーザ #{User.online_users.count}人 / #{active_users_count}人がオンライン、
+  未登録のホスト: #{ARPScan.scan.length - active_users_count}台
+  （10分毎更新）
+
+%table.table.table-hover
+  %tr
+    %th 状態
+    %th メンバー
+    %th 最終時刻
+  - User.active_users.each do |user|
+    %tr<
+      %td{:class => (user.online? ? "online" : "offline")}&= (user.online? ? "オンライン" : "不在")
+      %td<
+        %img{:src => "img/user.png", :width => "18px"}<
+        &= "#{user.name}（#{user.identifier}）"
+        %td&= user.online? ? "-" : user.last_presence.strftime("%m月%d日 %H:%M")
+
+%h2 ランキング
+%p 今月の累積在室時間によるランキング
+
+%table.table.table-hover
+  %tr
+    %th 順位
+    %th メンバー
+    %th 累積時間
+  - User.sort_by_accumlated_time.each_with_index do |user, index|
+    %tr<
+      %td&= index+1
+      %td<
+        %img{:src => "img/user.png", :width => "18px"}<
+        &="#{user.name}（#{user.identifier}）"
+      %td&= "#{user.present_accumlated_time / 60}時間 #{user.present_accumlated_time % 60}分"
+%h3 用語説明
+%dl.dl-horizontal
+  %dt アクティブユーザ
+  %dd
+    直近1か月以内に、ネットワークを利用している利用者のこと。1か月より長い期間、ネットワークにしていない場合はカウントされません。
+    再びネットワークに繋ぐと、アクティブユーザに復帰します。
+  %dt 未登録のホスト
+  %dd
+    このサービスに登録しておらず、なおかつ無視リストに登録されていないネットワーク上のホストの数です。
+    登録していないネットワークの利用者が存在していても、誰かがいるかもしれないことが分かります。
+  %dt 在席時間
+  %dd
+    ここでは、ネットワークを利用している時間をいいます。
+    10分おきにネットワーク上のホストをチェックし、利用中であった場合に当月分の在席時間に10分が加算され、記録されます。
+    各月の利用時間については、各ユーザページから見ることができます。
+  %dt ランキング
+  %dd
+    当月分の在席時間の累積によるランキングです。

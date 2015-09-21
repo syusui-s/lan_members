@@ -1,0 +1,26 @@
+%h2 アカウント登録
+
+- if @messages
+  - @messages.each do |msg|
+    = create_alert("danger", msg)
+
+
+%form.form-horizontal{:action => "/signup", :method => "post"}
+  .form-group
+    %label.col-md-1.control-label{:for => "user-id"} ユーザ名
+    .col-md-3
+      %input#user-id.form-control{:type => "text", :name => "user-id", :pattern => "[A-Za-z0-9]+", :maxlength => 16, :required => true}
+    %span.col-md-8.help-block ログイン時に使用します。英数字を使用できます。
+  .form-group
+    %label.col-md-1.control-label{:for => "user-name"} 名前
+    .col-md-3
+      %input#user-id.form-control{:type => "text", :name => "user-name", :required => true}
+    %span.col-md-8.help-block 他の人に分かりやすい名前を設定します。
+  .form-group
+    %label.col-md-1.control-label{:for => "user-password"} パスワード
+    .col-md-3
+      %input#user-password.form-control{:type => "password", :name => "user-password", :required => true}
+    %span.col-md-8.help-block パスワードは8〜64文字以下で指定します
+  .form-group
+    .col-md-offset-1.col-md-11
+      %input.btn.btn-primary{:type => "submit", :value => "登録"}

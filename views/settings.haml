@@ -1,0 +1,71 @@
+%h2 設定画面
+
+- if @success
+  = create_alert("success", "保存しました！")
+- if @messages
+  - @messages.each do |msg|
+    = create_alert("danger", msg)
+
+%form.form-horizontal{:action => "/settings/user", :method => "post"}
+  %input{:type => "hidden", :name => '_method', :value => 'put'}
+  %fieldset
+    %legend ユーザ情報
+    .form-group
+      %label.col-md-1.control-label{:for => "user-id"} ユーザ名
+      .col-md-11
+        %p#user-id.form-control-static{:name => "user-id"}
+          &= "#{@user.identifier}"
+    .form-group
+      %label.col-md-1.control-label{:for => "user-name"} 名前
+      .col-md-4
+        %input#user-name.form-control{:type => "text", :name => "user-name", :value => "#{@user.name}"}
+    .form-group
+      .col-md-offset-1.col-md-11
+        %input.btn.btn-default{:type => "reset", :value => "リセット"}
+        %input.btn.btn-primary{:type => "submit", :value => "保存"}
+
+%form.form-horizontal{:action => "/settings/host", :method => "post"}
+  %input{:type => "hidden", :name => '_method', :value => 'post'}
+
+  %fieldset
+    %legend ホストの追加
+    .form-group
+      %label.col-md-1.control-label{:for => "host-name"} ホスト名
+      .col-md-3
+        %input#host-name.form-control{:type => "text", :name => "host-name", :placeholder => "ホスト名", :required => true}
+      %span.col-md-8.help-block 管理の際に分かりやすいニックネームを入力します。
+    .form-group
+      %label.col-md-1.control-label{:for => "host-mac"} MACアドレス
+      .col-md-3
+        %input#host-mac.form-control{:type => "text", :name => "host-mac", :placeholder => "XX:XX:XX:XX:XX:XX", :pattern => (["[0-9A-Fa-f]{2}"]*6).join(':'), :required => true}
+      %span.col-md-8.help-block
+        NICのMACアドレスを指定します。無線と有線でNICが異なります。
+        確認方法：
+        %a{:href => "http://121ware.com/qasearch/1007/app/servlet/relatedqa?QID=014380"} Windows
+        、
+        %a{:href => "http://asahi-net.jp/support/guide/wireless/0023.html"} Mac OS X
+        、
+        %a{:href => "http://asahi-net.jp/support/guide/wireless/0021.html"} iPhone
+        、
+        %a{:href => "http://faq.zaq.ne.jp/faq_detail.html?id=4830"} Android
+
+    .form-group
+      .col-md-3.col-md-offset-1
+        %input.btn.btn-default{:type => "reset", :value => "リセット"}
+        %input.btn.btn-primary{:type => "submit", :value => "追加"}
+
+%form.form-horizontal{:action => "/settings/host", :method => "post"}
+  %input{:type => "hidden", :name => '_method', :value => 'delete'}
+
+  %fieldset
+    %legend ホストの削除
+    .form-group
+      %label.col-md-2.control-label{:for => "host-delete"} 削除するホスト
+      .col-md-3
+        %select#host-delete.form-control{:name => "host-delete"}
+          - @user.hosts.each do |name, mac|
+            %option{:value => "#{mac}"}&= "#{name} （#{mac}）"
+      %span.col-md-7.help-block 削除すると、ユーザのホストとして認識されないようになります。
+    .form-group
+      .col-md-10.col-md-offset-2
+        %input.btn.btn-danger{:type => "submit", :value => "削除"}

@@ -1,0 +1,17 @@
+%h2 ログイン
+
+- if locals[:failed]
+  = create_alert("danger", "ユーザ名またはパスワードが間違っています。")
+
+%form.form-horizontal{:action => "/session", :method => "post"}
+  .form-group
+    %label.col-md-1.control-label{:for => "user-id"} ユーザ名
+    .col-md-3
+      %input#user-id.form-control{:type => "text", :name => "user-id"}
+  .form-group
+    %label.col-md-1.control-label{:for => "user-password"} パスワード
+    .col-md-3
+      %input#user-password.form-control{:type => "password", :name => "user-password"}
+  .form-group
+    .col-md-offset-1.col-md-11
+      %input.btn.btn-primary{:type => "submit", :value => "ログイン"}
