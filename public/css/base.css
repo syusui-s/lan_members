@@ -2,3 +2,4 @@
 .online:before { content: "● " }
 .offline { color: #808080; }
 .offline:before { content: "● " }
+.user-icon{ width: 18px; height: 18px; }

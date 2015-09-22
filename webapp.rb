@@ -147,7 +147,7 @@ class WebApp < Sinatra::Base
       flash[:success] = true
       redirect to('/settings')
     else
-      flash[:messages] = ["不正なMACアドレスなため、削除ができませんでした。"]
+      flash[:messages] = ["ホストの指定が正しくありません。"]
       redirect to('/settings')
     end
   end

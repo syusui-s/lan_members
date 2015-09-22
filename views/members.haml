@@ -14,9 +14,9 @@
     %tr<
       %td{:class => (user.online? ? "online" : "offline")}&= (user.online? ? "オンライン" : "不在")
       %td<
-        %img{:src => "img/user.png", :width => "18px"}<
+        %img.user-icon{:src => "img/user.png", :alt => "#{user.name}のアイコン"}
         &= "#{user.name}（#{user.identifier}）"
-        %td&= user.online? ? "-" : user.last_presence.strftime("%m月%d日 %H:%M")
+      %td&= user.online? ? "-" : user.last_presence.strftime("%m月%d日 %H:%M")
 
 %h2 ランキング
 %p 今月の累積在室時間によるランキング
@@ -30,7 +30,7 @@
     %tr<
       %td&= index+1
       %td<
-        %img{:src => "img/user.png", :width => "18px"}<
+        %img.user-icon{:src => "img/user.png", :alt => "#{user.name}のアイコン"}
         &="#{user.name}（#{user.identifier}）"
       %td&= "#{user.present_accumlated_time / 60}時間 #{user.present_accumlated_time % 60}分"
 %h3 用語説明

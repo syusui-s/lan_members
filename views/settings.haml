@@ -13,7 +13,7 @@
     .form-group
       %label.col-md-1.control-label{:for => "user-id"} ユーザ名
       .col-md-11
-        %p#user-id.form-control-static{:name => "user-id"}
+        %p#user-id.form-control-static
           &= "#{@user.identifier}"
     .form-group
       %label.col-md-1.control-label{:for => "user-name"} 名前
@@ -39,7 +39,7 @@
       .col-md-3
         %input#host-mac.form-control{:type => "text", :name => "host-mac", :placeholder => "XX:XX:XX:XX:XX:XX", :pattern => (["[0-9A-Fa-f]{2}"]*6).join(':'), :required => true}
       %span.col-md-8.help-block
-        NICのMACアドレスを指定します。無線と有線でNICが異なります。
+        ネットワークアダプタのMACアドレスを指定します。
         確認方法：
         %a{:href => "http://121ware.com/qasearch/1007/app/servlet/relatedqa?QID=014380"} Windows
         、
@@ -62,7 +62,8 @@
     .form-group
       %label.col-md-2.control-label{:for => "host-delete"} 削除するホスト
       .col-md-3
-        %select#host-delete.form-control{:name => "host-delete"}
+        %select#host-delete.form-control{:name => "host-delete", :required => true}
+          %option{:disabled => true, :selected => true, :value => ""}&= "----"
           - @user.hosts.each do |name, mac|
             %option{:value => "#{mac}"}&= "#{name} （#{mac}）"
       %span.col-md-7.help-block 削除すると、ユーザのホストとして認識されないようになります。
