@@ -1,6 +1,12 @@
 # LAN Members
 LAN Members is a web service provides a list of devices connected to LAN.
 
+Features:
+
+* User Accounts
+* List members in LAN
+* Record usage time and last time LAN used
+
 ## Requirement
 This software needs these softwares:
 
