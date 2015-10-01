@@ -1,8 +1,10 @@
 %h2 利用者の状況
 %p
   - active_users = User.active_users
+  - scanned = ARPScan.scan
+  - active_hosts = scanned.select{|h| User.online_users.any? {|u| u.hosts.value?(h.mac_addr.downcase)} }
   アクティブユーザ #{User.online_users.count}人 / #{active_users.count}人がオンライン、
-  未登録のホスト: #{ARPScan.scan.length - active_users.count}台 <!-- 要修正 -->
+  未登録のオンラインのホスト: #{scanned.length - active_hosts.count}台
   （10分毎更新）
 
 %table.table.table-hover
