@@ -7,6 +7,7 @@ end
 
 gem 'sinatra'
 gem 'sinatra-contrib'
+gem 'sinatra-flash'
 gem 'rack-protection'
 gem 'thin'
 gem 'haml'

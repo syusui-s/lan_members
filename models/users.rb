@@ -86,7 +86,8 @@ class User
     self.last_presence >= (Time.now - ONLINE_TIME_INTERVAL)
   end
 
-  def present_accumlated_time
+  # 今月の累積時間
+  def monthly_accumlated_time
     self.monthly_report[self.class.format_month(Time.now)]
   end
 
@@ -98,8 +99,8 @@ class User
 
     scanned = ARPScan.scan()
     users.each do |user|
-      if user.hosts.any?{|name, mac| scanned.any?{|host| host.mac_addr.downcase == mac } }
-        if ARPScan.last_scan() > user.last_presence
+      if not user.hosts.empty? and user.hosts.any?{|name, mac| scanned.any?{|host| host.mac_addr.downcase == mac } }
+        if not user.last_presence or ARPScan.last_scan() > user.last_presence
           user.last_presence = ARPScan.last_scan()
           key = self.format_month(ARPScan.last_scan())
           user.monthly_report[key] = (user.monthly_report[key] || 0) + 10
@@ -111,7 +112,7 @@ class User
 
   # ACTIVE_TIME_INTERVAL前より最近にアクティブだったユーザのコレクション
   def self.active_users
-    self.where(:last_presence.gt => (Time.now - ACTIVE_TIME_INTERVAL))
+    self.where(:last_presence.gt => (Time.now - ACTIVE_TIME_INTERVAL)).desc(:last_presence)
   end
 
   # ONLINE_TIME_INTERVAL前にオンラインだったユーザのコレクション
@@ -119,9 +120,9 @@ class User
     self.where(:last_presence.gt => (Time.now - ONLINE_TIME_INTERVAL))
   end
 
-  # アクティブユーザを累積時間の多い順に取得
-  def self.sort_by_accumlated_time
-    self.active_users.desc("monthly_report.#{self.format_month(Time.now)}")
+  # 今月中にアクティブだったユーザのコレクション
+  def self.monthly_active_users
+    self.where(:"monthly_report.#{self.format_month(Time.now)}".ne => nil).to_a
   end
 
   def self.format_month(time)

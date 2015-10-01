@@ -1,14 +1,14 @@
 require 'sinatra/base'
 require 'sinatra/reloader'
-require 'rack-flash'
+require 'sinatra/flash'
 require 'haml'
 
 require_relative 'models/users'
 require_relative 'lib/arp_scan'
 
 class WebApp < Sinatra::Base
-  use Rack::Flash
   register Sinatra::Reloader
+  register Sinatra::Flash
 
   enable :sessions
   enable :method_override
@@ -82,7 +82,7 @@ class WebApp < Sinatra::Base
   # ログイン中メンバー一覧
   get '/' do
     if session[:user_id]
-      User.update_status
+      User.update_status(force_update: true)
       haml :members
     else
       haml :start

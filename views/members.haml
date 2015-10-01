@@ -1,8 +1,8 @@
 %h2 利用者の状況
 %p
-  - active_users_count = User.active_users.count
-  アクティブユーザ #{User.online_users.count}人 / #{active_users_count}人がオンライン、
-  未登録のホスト: #{ARPScan.scan.length - active_users_count}台
+  - active_users = User.active_users
+  アクティブユーザ #{User.online_users.count}人 / #{active_users.count}人がオンライン、
+  未登録のホスト: #{ARPScan.scan.length - active_users.count}台 <!-- 要修正 -->
   （10分毎更新）
 
 %table.table.table-hover
@@ -26,13 +26,14 @@
     %th 順位
     %th メンバー
     %th 累積時間
-  - User.sort_by_accumlated_time.each_with_index do |user, index|
+  - User.monthly_active_users.each_with_index do |user, index|
     %tr<
       %td&= index+1
       %td<
         %img.user-icon{:src => "img/user.png", :alt => "#{user.name}のアイコン"}
         &="#{user.name}（#{user.identifier}）"
-      %td&= "#{user.present_accumlated_time / 60}時間 #{user.present_accumlated_time % 60}分"
+      %td&= user.monthly_accumlated_time ? "#{user.monthly_accumlated_time / 60}時間 #{user.monthly_accumlated_time % 60}分" : "0分" # 念の為の分岐
+
 %h3 用語説明
 %dl.dl-horizontal
   %dt アクティブユーザ

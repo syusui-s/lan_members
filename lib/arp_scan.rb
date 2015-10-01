@@ -18,14 +18,13 @@ module ARPScan
   # 出力ファイルから読み込み、Nodeのリストにして返す
   def scan()
     file_update_time = File::ctime(ARPSCAN_OUTPUT_PATH).round(0)
-    if file_update_time != @@last_scan
-      @@last_scan = file_update_time
+    if file_update_time != self.last_scan
+      self.last_scan = file_update_time
       output = File::read(ARPSCAN_OUTPUT_PATH)
 
       @@last_result = output.each_line.map{|line|
         match = line.match(/^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s+([0-9a-f:]{17})\s+(.+)$/)
-        next Host.new(match[1], match[2], match[3]) if match
-      }.compact!
+        next match ? Host.new(match[1], match[2], match[3]) : nil }.compact
     end
     return @@last_result
   end
@@ -34,5 +33,10 @@ module ARPScan
     @@last_scan ||= Time.new(0)
     return @@last_scan
   end
-  module_function :scan, :last_scan
+
+  def last_scan=(time)
+    @@last_scan = time
+  end
+
+  module_function :scan, :last_scan, :last_scan=
 end

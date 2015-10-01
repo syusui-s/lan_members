@@ -12,7 +12,8 @@ This software needs these softwares:
 
 * Ruby >=2.2.0
 * MongoDB >= 3.0.6
-* arp-scan >= 1.7.4
+* nmap
+* iproute "ip" or net-tools "arp" (ordinarily, these are installed when OS was installed)
 * cron
 * (maybe) ruby-devlop package and C compiler to build needed gems
 
@@ -22,13 +23,13 @@ Execute this to resolve dependencies:
 	$ bundle
 
 ## Execute
-Edit crontab of root:
+Edit crontab:
 
-	# crontab -e
+	% crontab -e
 
 and add this:
 
-	*/10 * * * * arp-scan -I eth0 192.168.1.0/28 > /tmp/arp_scan
+	*/10 * * * * PATH_TO_LAN_MEMBER/scan.sh 192.168.1.0/24
 
 Cron executes arp-scan and writes the result to `/tmp/arp_scan` every 10 minutes.
 Needed to rewrite network address to yours.
@@ -36,7 +37,7 @@ Needed to rewrite network address to yours.
 	$ mongodb --dbpath=db
 	$ bundle exec rackup -p 4567
 
-Then access http://localhost:4567/ .
+Then access <http://localhost:4567/> .
 
 ## License
 [MIT License](http://opensource.org/licenses/MIT)
