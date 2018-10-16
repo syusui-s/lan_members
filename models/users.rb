@@ -21,7 +21,7 @@ class User
   validates :identifier,     :presence => true
   validates :identifier,     :uniqueness => true
   validates :identifier,     :uniqueness => { :message => "ユーザ名がすでに使用されています。別のものを指定してください。" }
-  validates :identifier,     :format => { with: /^[A-Za-z0-9]+$/ , :message => "ユーザ名に使用できない文字が含まれています。A-Za-z0-9のみ使用できます。"}
+  validates :identifier,     :format => { with: /\A[A-Za-z0-9]+\z/ , :message => "ユーザ名に使用できない文字が含まれています。A-Za-z0-9のみ使用できます。"}
   validates :identifier,     :length => { minimum: 1, maximum: 16 , :message => "ユーザ名の長さは、1〜16文字でなければなりません。"}
   validates :name,           :presence => true
   validates :name,           :length => { minimum: 1, maximum: 16 , :message => "名前は1〜16文字でなければなりません。"}
@@ -36,7 +36,7 @@ class User
   end
 
   def hostmac_check
-    errors.add(:hosts, "MACアドレスが不正な形式です。") unless self.hosts.all?{|_, mac| mac.is_a?(String) and mac =~ /^#{(["[0-9a-f]{2}"]*6).join(":")}$/ }
+    errors.add(:hosts, "MACアドレスが不正な形式です。") unless self.hosts.all?{|_, mac| mac.is_a?(String) and mac =~ /\A#{(["[0-9a-f]{2}"]*6).join(":")}\z/ }
   end
 
   def self.hash_password(password, salt)
